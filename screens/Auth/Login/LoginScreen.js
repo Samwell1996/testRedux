@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Formik } from 'formik';
 import { Text, View, KeyboardAvoidingView } from 'react-native';
-import { observer } from 'mobx-react';
 import T from 'prop-types';
 import {
   email,
@@ -11,7 +10,7 @@ import {
 import InputAuth from '../../../components/Auth/InputAuth/InputAuth';
 import Bottom from '../../../components/Auth/Bottom/Bottom';
 import screens from '../../../navigation/screens';
-import { useStore } from '../../../stores/createStore';
+// import { useStore } from '../../../stores/createStore';
 import { s } from '../styles';
 import gStyles from '../../../styles/styles';
 
@@ -20,12 +19,14 @@ function LoginScreen({ navigation }) {
     email,
     password,
   });
-  const store = useStore();
-
+  // const store = useStore();
+  
+  // async function onSubmit({ email, password }) {
+  //   await store.auth.login.run({ email, password });
+  // }
   async function onSubmit({ email, password }) {
-    await store.auth.login.run({ email, password });
+    
   }
-
   return (
     <Formik
       initialValues={{
@@ -35,7 +36,7 @@ function LoginScreen({ navigation }) {
       validationSchema={validationSchema}
       onSubmit={onSubmit}
       validateOnBlur
-    > 
+    >
       {({
         values,
         errors,
@@ -107,4 +108,4 @@ LoginScreen.propTypes = {
   navigation: T.object,
 };
 
-export default observer(LoginScreen);
+export default memo(LoginScreen);

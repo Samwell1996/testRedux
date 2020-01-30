@@ -1,6 +1,8 @@
+import { AsyncStorage } from 'react-native';
 import * as actions from './appActions';
-import Api from '../../Api';
-import { viewerOperations } from '../viewer';
+import Api, { SocketApi } from '../../Api';
+// import { viewerOperations } from '../viewer';
+import NavigationService from '../../services';
 
 export function init() {
   return async function initThunk(dispatch) {
@@ -8,12 +10,20 @@ export function init() {
       dispatch(actions.initialization.start());
 
       Api.Auth.init();
+      const token = await AsyncStorage.getItem('___token');
+      if (!token) {
+        NavigationService.navigateToAuth();
+        return;
+      }
+      await Api.Auth.setToken(token);
+      console.log('token', token);
 
-      await dispatch(viewerOperations.fetchViewer());
-      
+      // await dispatch(viewerOperations.fetchViewer());
+
+      // SocketApi.init(token);
+      // SocketApi.handleMessages(store.chats.handleMessage);
       SocketApi.init(token);
-      SocketApi.handleMessages(store.chats.handleMessage);
-
+      console.log('123');
       dispatch(actions.initialization.success());
       NavigationService.navigateToApp();
     } catch (err) {
@@ -24,15 +34,3 @@ export function init() {
     }
   };
 }
-
-try {
-  const token = await AsyncStorage.getItem('___token');
-
-  if (!token) {
-    NavigationService.navigateToAuth();
-    return;
-  }
-
-  await Api.Auth.setToken(token);
-
-  const res = await Api.Account.getUser();

@@ -1,10 +1,9 @@
-import { combineReducer } from 'redux';
 import app from './app';
 import auth from './auth';
-import viewer from './viewer';
+// import viewer from './viewer';
 
-export default combineReducer({
+export default {
   app,
   auth,
-  viewer,
-});
+  // viewer,
+};

@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { View, YellowBox } from 'react-native';
-import { Provider, connect } from 'react-redux';
+import { Provider } from 'react-redux';
 import { SplashScreen } from 'expo';
 import Navigator from './navigation/Index';
 import globalStyles from './styles/styles';
-import storeRx from './storeRedux/createStore';
+import store, { createPersist } from './storeRx/store';
 // import { createStore, Provider } from './stores/createStore';
-import Api from './Api';
+import { appOperations } from './modules';
 
 // const store = createStore();
 
@@ -16,24 +16,22 @@ export default function App() {
   useEffect(() => {
     // async function bootstrap() {
     //   await store.bootstrap();
-
-    //   YellowBox.ignoreWarnings(['Require cycle:']);
-    //   SplashScreen.hide();
     // }
+    async function asyncPersist() {
+      await createPersist(store);
+      YellowBox.ignoreWarnings(['Require cycle:']);
+      SplashScreen.hide();
+      await dispatch(appOperations.init());
+    }
     // bootstrap();
-
-    Api.Auth.init();
+    asyncPersist();
   }, []);
 
-  const AppConnected = connect()(App);
-
   return (
-    <Provider store={storeRx}>
-      <AppConnected>
-        <View style={[globalStyles.fillAll]}>
-          <Navigator />
-        </View>
-      </AppConnected>
+    <Provider store={store}>
+      <View style={[globalStyles.fillAll]}>
+        <Navigator />
+      </View>
     </Provider>
   );
 }

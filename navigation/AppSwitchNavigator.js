@@ -5,7 +5,7 @@ import AppTabNavigator from './AppTabNavigator';
 import LoadingScreen from '../screens/Loading/LoadingScreen';
 
 const SwitchNavigator = createSwitchNavigator({
-  [screens.Loading]: LoadingScreen,
+  // [screens.Loading]: LoadingScreen,
   [screens.Auth]: AuthNavigator,
   [screens.MainApp]: AppTabNavigator,
 });
