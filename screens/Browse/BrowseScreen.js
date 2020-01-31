@@ -15,7 +15,12 @@ import ListFooter from '../../components/ProductList/ListFooter/ListFooter';
 import SearchView from '../../components/Filters/SearchView/SearchView';
 import { latestProductsOperations } from '../../modules/latestProducts';
 
-function BrowseScreen({ items, fetchLatest, isLoading }) {
+function BrowseScreen({
+  items,
+  fetchLatest,
+  isLoading,
+  fetchMoreLatest,
+}) {
   const store = useStore();
 
   const [search, setSearch] = useState('');
@@ -38,19 +43,14 @@ function BrowseScreen({ items, fetchLatest, isLoading }) {
         )}
       </Header>
       {!!search.length && (
-        <SearchView
-          // items={store.latestProducts.search(search)}
-          setSearch={setSearch}
-        />
+        <SearchView items={items} setSearch={setSearch} />
       )}
       <ProductList
         store={items}
         onRefresh={() => fetchLatest()}
         refreshing={isLoading}
-        // ListFooterComponent={() => (
-        //   <ListFooter fetch={store.latestProducts.fetchMore} />
-        // )}
-        // onEndReached={() => store.latestProducts.fetchMore.run()}
+        // ListFooterComponent={() => <ListFooter fetch={items} />}
+        // onEndReached={() => fetchMoreLatest()}
         // onEndReachedThreshold={0.3}
       />
     </View>
@@ -66,6 +66,7 @@ BrowseScreen.propTypes = {
   isLoading: T.func,
   items: T.array,
   fetchLatest: T.func,
+  fetchMoreLatest: T.func,
 };
 
 function mapStateToProps(state) {
@@ -77,6 +78,7 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = {
   fetchLatest: latestProductsOperations.fetchLatestProducts,
+  fetchMore: latestProductsOperations.fetchMoreLatest,
 };
 
 export default connect(

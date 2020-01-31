@@ -2,7 +2,7 @@ import * as actions from './viewerActions';
 import Api from '../../Api';
 
 export function fetchViewer() {
-  return async function initThunk(dispatch) {
+  return async function viewerThunk(dispatch) {
     try {
       dispatch(actions.fetchViewer.start());
       const res = await Api.Account.getUser();
@@ -11,4 +11,8 @@ export function fetchViewer() {
       dispatch(actions.fetchViewer.error({ message: err.message }));
     }
   };
+}
+
+export function fetchViewerId() {
+  
 }

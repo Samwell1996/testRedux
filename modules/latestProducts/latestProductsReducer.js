@@ -8,6 +8,12 @@ const INITIAL_STATE = {
     isError: false,
     error: null,
   },
+  getByProductId: {
+    items: [],
+    isLoading: false,
+    isError: false,
+    error: null,
+  },
 };
 
 export default handleActions(
@@ -38,6 +44,32 @@ export default handleActions(
         isError: true,
       },
     }),
+    // [actions.getByProductId.start]: (state) => ({
+    //   ...state,
+    //   getByProductId: {
+    //     ...state.getByProductId,
+    //     isLoading: true,
+    //     error: null,
+    //     isError: false,
+    //   },
+    // }),
+    // [actions.getByProductId.success]: (state, action) => ({
+    //   ...state,
+    //   getByProductId: {
+    //     ...state.getByProductId,
+    //     isLoading: false,
+    //     items: action.payload,
+    //   },
+    // }),
+    // [actions.getByProductId.error]: (state, action) => ({
+    //   ...state,
+    //   getByProductId: {
+    //     ...state.getByProductId,
+    //     isLoading: false,
+    //     error: action.payload,
+    //     isError: true,
+    //   },
+    // }),
   },
   INITIAL_STATE,
 );

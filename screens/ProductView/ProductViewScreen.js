@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import {
   ScrollView,
   Text,
@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { observer } from 'mobx-react';
 import { Linking } from 'expo';
+import { connect } from 'react-redux';
 import ViewMoreText from 'react-native-view-more-text';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
@@ -32,23 +33,24 @@ import { useUsersCollection } from '../../stores/Users/UsersCollection';
 import LoadingComponent from '../../components/ProductView/LoadingComponent/LoadingComponent';
 import screens from '../../navigation/screens';
 import { useViewer } from '../../stores/ViewerStore';
+import { latestProductsOperations } from '../../modules/latestProducts';
 
 function ProductViewScreen({ navigation }) {
   const [slider, setSlider] = useState(0);
   const store = useStore();
-  const viewer = useViewer();
+  // const viewer = useViewer();
   const productId = navigation.getParam('productId');
-  const collection = useProductsCollection();
+  // const collection = useProductsCollection();
   const product = collection.get(productId);
   const usersCollection = useUsersCollection();
   const user = usersCollection.get(product.ownerId) || {};
   const description =
     product.description || 'Product have no description';
-  const isViewer = product.ownerId === viewer.user.id;
+  // const isViewer = product.ownerId === viewer.user.id;
 
   useEffect(() => {
-    store.entities.users.fetchUserById.run(product.ownerId);
-    store.entities.products.fetchProductById.run(productId);
+    // store.entities.users.fetchUserById.run(product.ownerId);
+    // store.entities.products.fetchProductById.run(productId);
   }, []);
 
   function openPhone() {
@@ -156,7 +158,7 @@ function ProductViewScreen({ navigation }) {
           </View>
         </View>
       </ScrollView>
-      {!isViewer && (
+      {/* {!isViewer && (
         <View style={s.containerPhoneMessage}>
           <TouchableOpacity
             activeOpacity={0.7}
@@ -202,7 +204,7 @@ function ProductViewScreen({ navigation }) {
             <Image source={sliceBlue} style={s.imageComponentBlue} />
           </TouchableOpacity>
         </View>
-      )}
+      )} */}
     </View>
   );
 }
@@ -216,4 +218,20 @@ ProductViewScreen.propTypes = {
   navigation: T.object,
 };
 
-export default observer(ProductViewScreen);
+function mapStateToProps(state) {
+  return {
+    items: state.latestProducts.latestProducts.items,
+    isLoading: state.latestProducts.latestProducts.isLoading,
+  };
+}
+
+const mapDispatchToProps = {
+  fetchProductId: latestProductsOperations.fetchProductId,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(memo(ProductViewScreen));
+
+// export default observer(ProductViewScreen);

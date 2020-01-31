@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, memo } from 'react';
 import {
   Text,
   View,
@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Image,
 } from 'react-native';
+import { connect } from 'react-redux';
 import {
   Ionicons,
   Feather,
@@ -26,8 +27,9 @@ import screens from '../../navigation/screens';
 import Api from '../../Api';
 import { s } from './styles';
 import colors from '../../styles/colors';
+import { latestProductsOperations } from '../../modules/latestProducts';
 
-function CreatePostScreen({ navigation }) {
+function CreatePostScreen({ navigation, createProduct }) {
   const store = useStore();
   const actionRef = useRef();
   const [isSwitch, setIsSwitch] = useState(true);
@@ -40,13 +42,15 @@ function CreatePostScreen({ navigation }) {
     price,
     location,
   }) {
-    await store.ownProducts.createProduct.run({
+    console.log('1create');
+    await createProduct({
       title,
       description,
       photos,
       price,
       location,
     });
+    console.log('2create');
   }
   const {
     values,
@@ -284,6 +288,20 @@ CreatePostScreen.navigationOptions = ({ navigation }) => ({
 
 CreatePostScreen.propTypes = {
   navigation: T.object,
+  createProduct: T.func,
 };
 
-export default observer(CreatePostScreen);
+function mapStateToProps(state) {
+  return {
+    isLoading: state.latestProducts.latestProducts.isLoading,
+  };
+}
+
+const mapDispatchToProps = {
+  fetchLatest: latestProductsOperations.createProduct,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CreatePostScreen);
