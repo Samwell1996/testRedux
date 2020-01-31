@@ -10,7 +10,7 @@ function ProductList({ navigation, style, store, ...props }) {
     <View style={s.container}>
       <FlatList
         contentContainerStyle={s.list}
-        data={store.items.slice()}
+        data={store.slice()}
         numColumns={2}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (

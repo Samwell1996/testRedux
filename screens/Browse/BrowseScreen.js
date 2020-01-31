@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { TouchableOpacity, View } from 'react-native';
 import { observer } from 'mobx-react';
 import { FontAwesome } from '@expo/vector-icons';
+import { connect } from 'react-redux';
 import T from 'prop-types';
 import { useStore } from '../../stores/createStore';
 import ProductList from '../../components/ProductList/ProductList';
@@ -12,16 +13,16 @@ import gStyles from '../../styles/styles';
 import colors from '../../styles/colors';
 import ListFooter from '../../components/ProductList/ListFooter/ListFooter';
 import SearchView from '../../components/Filters/SearchView/SearchView';
+import { latestProductsOperations } from '../../modules/latestProducts';
 
-function BrowseScreen() {
+function BrowseScreen({ items, fetchLatest, isLoading }) {
   const store = useStore();
 
   const [search, setSearch] = useState('');
-
-  // useEffect(() => {
-  //   store.latestProducts.fetchLatest.run();
-  // }, []);
-
+  useEffect(() => {
+    // store.latestProducts.fetchLatest.run();
+    fetchLatest();
+  }, []);
   return (
     <View>
       <Header>
@@ -42,16 +43,16 @@ function BrowseScreen() {
           setSearch={setSearch}
         />
       )}
-      {/* <ProductList
-        store={store.latestProducts}
-        onRefresh={() => store.latestProducts.fetchLatest.run()}
-        refreshing={store.latestProducts.fetchLatest.isLoading}
-        ListFooterComponent={() => (
-          <ListFooter fetch={store.latestProducts.fetchMore} />
-        )}
-        onEndReached={() => store.latestProducts.fetchMore.run()}
-        onEndReachedThreshold={0.3}
-      /> */}
+      <ProductList
+        store={items}
+        onRefresh={() => fetchLatest()}
+        refreshing={isLoading}
+        // ListFooterComponent={() => (
+        //   <ListFooter fetch={store.latestProducts.fetchMore} />
+        // )}
+        // onEndReached={() => store.latestProducts.fetchMore.run()}
+        // onEndReachedThreshold={0.3}
+      />
     </View>
   );
 }
@@ -61,6 +62,26 @@ BrowseScreen.navigationOptions = () => ({
   header: null,
 });
 
-BrowseScreen.propTypes = {};
+BrowseScreen.propTypes = {
+  isLoading: T.func,
+  items: T.array,
+  fetchLatest: T.func,
+};
 
-export default observer(BrowseScreen);
+function mapStateToProps(state) {
+  return {
+    items: state.latestProducts.latestProducts.items,
+    isLoading: state.latestProducts.latestProducts.isLoading,
+  };
+}
+
+const mapDispatchToProps = {
+  fetchLatest: latestProductsOperations.fetchLatestProducts,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(memo(BrowseScreen));
+
+// export default memo(BrowseScreen);

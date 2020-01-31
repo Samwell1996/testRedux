@@ -8,37 +8,31 @@ const INITIAL_STATE = {
     isError: false,
     error: null,
   },
-  user: null,
 };
 
 export default handleActions(
   {
-    [actions.viewer.start]: (state) => ({
+    [actions.latestProducts.start]: (state) => ({
       ...state,
-      fetchViewer: {
-        ...state.fetchViewer,
+      latestProducts: {
+        ...state.latestProducts,
         isLoading: true,
         error: null,
         isError: false,
       },
     }),
-    [combineActions(
-      actions.viewer.success,
-      authAction.login,
-      authAction.register,
-      authAction.restorePassword,
-    )]: (state, action) => ({
+    [actions.latestProducts.success]: (state, action) => ({
       ...state,
-      fetchViewer: {
-        ...state.fetchViewer,
+      latestProducts: {
+        ...state.latestProducts,
         isLoading: false,
+        items: action.payload,
       },
-      user: action.payload,
     }),
-    [actions.viewer.error]: (state, action) => ({
+    [actions.latestProducts.error]: (state, action) => ({
       ...state,
-      etchViewer: {
-        ...state.fetchViewer,
+      latestProducts: {
+        ...state.latestProducts,
         isLoading: false,
         error: action.payload,
         isError: true,
