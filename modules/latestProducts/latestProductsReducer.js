@@ -1,19 +1,19 @@
-import { handleActions, combineActions } from '@letapp/redux-actions';
-import * as actions from './viewerActions';
-import * as authAction from '../auth/authActions';
+import { handleActions } from '@letapp/redux-actions';
+import * as actions from './latestProductsActions';
 
 const INITIAL_STATE = {
-  fetchViewer: {
+  latestProducts: {
+    items: [],
     isLoading: false,
-    error: null,
     isError: false,
+    error: null,
   },
   user: null,
 };
 
 export default handleActions(
   {
-    [actions.fetchViewer.start]: (state) => ({
+    [actions.viewer.start]: (state) => ({
       ...state,
       fetchViewer: {
         ...state.fetchViewer,
@@ -23,7 +23,7 @@ export default handleActions(
       },
     }),
     [combineActions(
-      actions.fetchViewer.success,
+      actions.viewer.success,
       authAction.login,
       authAction.register,
       authAction.restorePassword,
@@ -35,7 +35,7 @@ export default handleActions(
       },
       user: action.payload,
     }),
-    [actions.fetchViewer.error]: (state, action) => ({
+    [actions.viewer.error]: (state, action) => ({
       ...state,
       etchViewer: {
         ...state.fetchViewer,

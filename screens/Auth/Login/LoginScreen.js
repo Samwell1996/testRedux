@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 import { Formik } from 'formik';
+import { connect } from 'react-redux';
 import { Text, View, KeyboardAvoidingView } from 'react-native';
 import T from 'prop-types';
 import {
@@ -10,22 +11,24 @@ import {
 import InputAuth from '../../../components/Auth/InputAuth/InputAuth';
 import Bottom from '../../../components/Auth/Bottom/Bottom';
 import screens from '../../../navigation/screens';
+import { authOperations } from '../../../modules/auth';
 // import { useStore } from '../../../stores/createStore';
 import { s } from '../styles';
 import gStyles from '../../../styles/styles';
 
-function LoginScreen({ navigation }) {
+function LoginScreen({ navigation, login }) {
   const validationSchema = shape({
     email,
     password,
   });
   // const store = useStore();
-  
+
   // async function onSubmit({ email, password }) {
   //   await store.auth.login.run({ email, password });
   // }
   async function onSubmit({ email, password }) {
-    
+    login({ email, password });
+    console.log({ email, password });
   }
   return (
     <Formik
@@ -106,6 +109,16 @@ LoginScreen.navigationOptions = () => ({
 
 LoginScreen.propTypes = {
   navigation: T.object,
+  login: T.func,
 };
 
-export default memo(LoginScreen);
+function mapStateToProps(state) {
+  return {
+    isLoading: state.auth.login.isLoading,
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  authOperations,
+)(memo(LoginScreen));

@@ -6,7 +6,7 @@ import Navigator from './navigation/Index';
 import globalStyles from './styles/styles';
 import store, { createPersist } from './storeRx/store';
 // import { createStore, Provider } from './stores/createStore';
-import { appOperations } from './modules';
+import { appOperations } from './modules/app';
 
 // const store = createStore();
 
@@ -21,7 +21,7 @@ export default function App() {
       await createPersist(store);
       YellowBox.ignoreWarnings(['Require cycle:']);
       SplashScreen.hide();
-      await dispatch(appOperations.init());
+      store.dispatch(appOperations.init());
     }
     // bootstrap();
     asyncPersist();

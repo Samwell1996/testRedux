@@ -1,7 +1,7 @@
 import { Alert } from 'react-native';
 import * as actions from './authActions';
 import Api from '../../Api';
-import NavigationServices from '../../services';
+import { NavigationService } from '../../services';
 
 export function login({ email, password }) {
   return async function loginThunk(dispatch) {
@@ -11,16 +11,15 @@ export function login({ email, password }) {
       const res = await Api.Auth.login({ email, password });
 
       const { user, token } = res.data;
-
       Api.Auth.setToken(token);
 
       dispatch(actions.login.success(user));
-      // Api.Auth.isLoggedIn(true);
-      NavigationServices.navigateToApp();
+      Api.Auth.isLoggedIn(true);
+      NavigationService.navigateToApp();
     } catch (err) {
       correctAuthAlert();
       dispatch(actions.login.error({ message: err.message }));
-      NavigationServices.navigateToAuth();
+      NavigationService.navigateToAuth();
     }
   };
 }
@@ -41,7 +40,7 @@ export function register({ email, password, fullName }) {
       Api.Auth.setToken(token);
 
       dispatch(actions.register.success(user));
-      NavigationServices.navigateToAuth();
+      NavigationService.navigateToAuth();
     } catch (err) {
       dispatch(actions.register.error({ message: err.message }));
     }
@@ -54,7 +53,7 @@ export function restorePassword() {
       dispatch(actions.restorePassword.start());
 
       dispatch(actions.restorePassword.success());
-      NavigationServices.navigateToAuth();
+      NavigationService.navigateToAuth();
     } catch (err) {
       dispatch(
         actions.restorePassword.error({ message: err.message }),
@@ -68,7 +67,7 @@ export function logout() {
     try {
       dispatch(actions.logout.start());
 
-      Api.Auth.logout();
+      await Api.Auth.logout();
 
       dispatch(actions.logout.success());
     } catch (err) {

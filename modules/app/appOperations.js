@@ -1,8 +1,8 @@
 import { AsyncStorage } from 'react-native';
 import * as actions from './appActions';
 import Api, { SocketApi } from '../../Api';
-// import { viewerOperations } from '../viewer';
-import NavigationService from '../../services';
+import { viewerOperations } from '../viewer';
+import { NavigationService } from '../../services';
 
 export function init() {
   return async function initThunk(dispatch) {
@@ -18,7 +18,7 @@ export function init() {
       await Api.Auth.setToken(token);
       console.log('token', token);
 
-      // await dispatch(viewerOperations.fetchViewer());
+      dispatch(viewerOperations.fetchViewer());
 
       // SocketApi.init(token);
       // SocketApi.handleMessages(store.chats.handleMessage);

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
 import { observer } from 'mobx-react';
+import { connect } from 'react-redux';
 import { Formik } from 'formik';
 import T from 'prop-types';
 import screens from '../../../navigation/screens';
@@ -10,6 +11,7 @@ import {
   fullName,
   shape,
 } from '../../../utils/validationSchema';
+import { authOperations } from '../../../modules/auth';
 import InputAuth from '../../../components/Auth/InputAuth/InputAuth';
 import Bottom from '../../../components/Auth/Bottom/Bottom';
 import { s } from '../styles';
@@ -17,7 +19,7 @@ import { useStore } from '../../../stores/createStore';
 import NavigationService from '../../../services/NavigationServices';
 import gStyles from '../../../styles/styles';
 
-function RegisterScreen({ navigation }) {
+function RegisterScreen({ navigation, register }) {
   const validationSchema = shape({
     email,
     password,
@@ -27,7 +29,7 @@ function RegisterScreen({ navigation }) {
   const store = useStore();
 
   async function onSubmit({ email, password, fullName }) {
-    await store.auth.register.run({ email, password, fullName });
+    register({ email, password, fullName });
     NavigationService.navigateToLogin();
   }
 
@@ -121,6 +123,16 @@ RegisterScreen.navigationOptions = () => ({
 
 RegisterScreen.propTypes = {
   navigation: T.object,
+  register: T.func,
 };
 
-export default observer(RegisterScreen);
+function mapStateToProps(state) {
+  return {
+    isLoading: state.auth.register.isLoading,
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  authOperations,
+)(memo(RegisterScreen));

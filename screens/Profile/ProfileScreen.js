@@ -6,24 +6,19 @@ import { Ionicons } from '@expo/vector-icons';
 import screens from '../../navigation/screens';
 import { s } from './styles';
 import colors from '../../styles/colors';
-import { useViewer } from '../../stores/ViewerStore';
-import image from '../../assets/box.png';
-import ProductList from '../../components/ProductList/ProductList';
+// import { useViewer } from '../../stores/ViewerStore';
+// import image from '../../assets/box.png';
+// import ProductList from '../../components/ProductList/ProductList';
 
 function ProfileScreen({ navigation }) {
-  const viewer = useViewer();
-  const ownProducts = viewer.user.ownProducts;
-  useEffect(() => {
-    ownProducts.fetchOwnProducts.run(viewer.user.id);
-  }, []);
 
   return (
     <View style={s.container}>
       <View style={s.containerHeader}>
         <View style={s.containerAvatar}>
-          <Text style={s.textAvatar}>{viewer.user.initials}</Text>
+          <Text style={s.textAvatar}>initials</Text>
         </View>
-        <Text style={s.textFullName}>{viewer.user.fullName}</Text>
+        <Text style={s.textFullName}>name</Text>
         <View style={s.containerTextInfo}>
           <Text style={s.textInfoFirst}>active: </Text>
           <Text style={s.textInfoSecond}>145</Text>
@@ -45,7 +40,7 @@ function ProfileScreen({ navigation }) {
           />
         </TouchableOpacity>
       </View>
-      {ownProducts.items.length > 0 ? (
+      {/* {ownProducts.items.length > 0 ? (
         <View style={s.containerProducts}>
           <ProductList
             onRefresh={() =>
@@ -63,7 +58,7 @@ function ProfileScreen({ navigation }) {
             User doesn’t sell anything yet
           </Text>
         </View>
-      )}
+      )} */}
     </View>
   );
 }

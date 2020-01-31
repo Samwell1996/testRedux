@@ -17,6 +17,11 @@ const INITIAL_STATE = {
     error: null,
     isError: false,
   },
+  logout: {
+    isLoading: false,
+    error: null,
+    isError: false,
+  },
 };
 
 export default handleActions(
@@ -48,7 +53,7 @@ export default handleActions(
     }),
     [actions.register.start]: (state) => ({
       ...state,
-      login: {
+      register: {
         ...state.register,
         isLoading: true,
         error: null,
@@ -57,14 +62,14 @@ export default handleActions(
     }),
     [actions.register.success]: (state) => ({
       ...state,
-      login: {
+      register: {
         ...state.register,
         isLoading: true,
       },
     }),
     [actions.register.error]: (state, action) => ({
       ...state,
-      login: {
+      register: {
         ...state.register,
         isLoading: false,
         error: action.payload,
@@ -73,7 +78,7 @@ export default handleActions(
     }),
     [actions.restorePassword.start]: (state) => ({
       ...state,
-      login: {
+      restorePassword: {
         ...state.restorePassword,
         isLoading: true,
         error: null,
@@ -82,14 +87,14 @@ export default handleActions(
     }),
     [actions.restorePassword.success]: (state) => ({
       ...state,
-      login: {
+      restorePassword: {
         ...state.restorePassword,
         isLoading: true,
       },
     }),
     [actions.restorePassword.error]: (state, action) => ({
       ...state,
-      login: {
+      restorePassword: {
         ...state.restorePassword,
         isLoading: false,
         error: action.payload,

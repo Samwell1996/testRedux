@@ -18,9 +18,9 @@ function BrowseScreen() {
 
   const [search, setSearch] = useState('');
 
-  useEffect(() => {
-    store.latestProducts.fetchLatest.run();
-  }, []);
+  // useEffect(() => {
+  //   store.latestProducts.fetchLatest.run();
+  // }, []);
 
   return (
     <View>
@@ -38,11 +38,11 @@ function BrowseScreen() {
       </Header>
       {!!search.length && (
         <SearchView
-          items={store.latestProducts.search(search)}
+          // items={store.latestProducts.search(search)}
           setSearch={setSearch}
         />
       )}
-      <ProductList
+      {/* <ProductList
         store={store.latestProducts}
         onRefresh={() => store.latestProducts.fetchLatest.run()}
         refreshing={store.latestProducts.fetchLatest.isLoading}
@@ -51,7 +51,7 @@ function BrowseScreen() {
         )}
         onEndReached={() => store.latestProducts.fetchMore.run()}
         onEndReachedThreshold={0.3}
-      />
+      /> */}
     </View>
   );
 }

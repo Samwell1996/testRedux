@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import {
   Text,
   View,
@@ -7,25 +7,27 @@ import {
   Alert,
   Linking,
 } from 'react-native';
+import { connect } from 'react-redux';
 import { Entypo, SimpleLineIcons } from '@expo/vector-icons';
 import { WebView } from 'react-native-webview';
 import T from 'prop-types';
 import { s } from './styles';
+import { authOperations } from '../../modules/auth';
 import gStyles from '../../styles/styles';
 import screens from '../../navigation/screens';
 import image from '../../assets/Logo.png';
 import { useStore } from '../../stores/createStore';
 
-function SettingScreen({ navigation }) {
+function SettingScreen({ navigation, logout }) {
   const [isWebView, setIsWebView] = useState(false);
   const store = useStore();
 
   function isLogout() {
+    logout();
     navigation.navigate(screens.Auth);
-    store.auth.logout();
   }
 
-  function logout() {
+  function logoutAlert() {
     Alert.alert(
       'Logout',
       'Do you really want to go out?',
@@ -79,7 +81,7 @@ function SettingScreen({ navigation }) {
       </View>
       <View style={s.containerLogOut}>
         <TouchableOpacity
-          onPress={logout}
+          onPress={logoutAlert}
           style={s.containerButtonLogOut}
         >
           <SimpleLineIcons
@@ -109,6 +111,15 @@ SettingScreen.navigationOptions = () => ({
 
 SettingScreen.propTypes = {
   navigation: T.object,
+  logout: T.func,
 };
 
-export default SettingScreen;
+function mapStateToProps(state) {
+  return {
+    isLoading: state.auth.logout.isLoading,
+  };
+}
+export default connect(
+  mapStateToProps,
+  authOperations,
+)(memo(SettingScreen));

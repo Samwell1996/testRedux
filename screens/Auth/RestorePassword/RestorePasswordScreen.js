@@ -1,27 +1,33 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
 import T from 'prop-types';
 import { Formik } from 'formik';
+import { connect } from 'react-redux';
 import { email, shape } from '../../../utils/validationSchema';
 import Bottom from '../../../components/Auth/Bottom/Bottom';
 import InputAuth from '../../../components/Auth/InputAuth/InputAuth';
+import { authOperations } from '../../../modules/auth';
 import screens from '../../../navigation/screens';
 import { s } from '../styles';
 import gStyles from '../../../styles/styles';
 
-function RestorePasswordScreen({ navigation }) {
+function RestorePasswordScreen({ navigation, restorePassword }) {
   const validationSchema = shape({
     email,
   });
+
+  async function onSubmit({ email }) {
+    restorePassword({ email });
+    NavigationService.navigateToLogin();
+  }
+
   return (
     <Formik
       initialValues={{
         email: '',
       }}
       validationSchema={validationSchema}
-      onSubmit={(values, { setSubmitting }) => {
-        setSubmitting(true);
-      }}
+      onSubmit={onSubmit}
       validateOnBlur
     >
       {({
@@ -74,6 +80,16 @@ RestorePasswordScreen.navigationOptions = () => ({
 
 RestorePasswordScreen.propTypes = {
   navigation: T.object,
+  restorePassword: T.func,
 };
 
-export default RestorePasswordScreen;
+function mapStateToProps(state) {
+  return {
+    isLoading: state.auth.register.isLoading,
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  authOperations,
+)(memo(RestorePasswordScreen));
