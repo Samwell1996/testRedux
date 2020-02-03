@@ -9,7 +9,6 @@ const INITIAL_STATE = {
     error: null,
   },
   getByProductId: {
-    items: [],
     isLoading: false,
     isError: false,
     error: null,
@@ -38,7 +37,7 @@ export default handleActions(
       latestProducts: {
         ...state.latestProducts,
         isLoading: false,
-        items: action.payload,
+        items: action.payload.result,
       },
     }),
     [actions.latestProducts.error]: (state, action) => ({
@@ -46,7 +45,7 @@ export default handleActions(
       latestProducts: {
         ...state.latestProducts,
         isLoading: false,
-        error: action.payload,
+        error: action.payload.result,
         isError: true,
       },
     }),
@@ -59,12 +58,11 @@ export default handleActions(
         isError: false,
       },
     }),
-    [actions.getByProductId.success]: (state, action) => ({
+    [actions.getByProductId.success]: (state) => ({
       ...state,
       getByProductId: {
         ...state.getByProductId,
         isLoading: false,
-        items: action.payload,
       },
     }),
     [actions.getByProductId.error]: (state, action) => ({

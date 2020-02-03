@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ScrollView,
   Text,
@@ -18,7 +18,6 @@ import {
 } from '@expo/vector-icons';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import T from 'prop-types';
-import { useProductsCollection } from '../../stores/Products/ProductCollection';
 import { NavigationService } from '../../services';
 import ItemPhotos from '../../components/ProductView/ItemPhotos/ItemPhotos';
 import notFound from '../../assets/image-not-found.jpg';
@@ -27,31 +26,34 @@ import sliceBlue from '../../assets/sliceBlue.png';
 import { s } from './styles';
 import gStyles from '../../styles/styles';
 import colors from '../../styles/colors';
-import { useStore } from '../../stores/createStore';
-import { useUsersCollection } from '../../stores/Users/UsersCollection';
 import LoadingComponent from '../../components/ProductView/LoadingComponent/LoadingComponent';
 import screens from '../../navigation/screens';
-import { useViewer } from '../../stores/ViewerStore';
-import { productsOperations } from '../../modules/products';
+import {
+  productsOperations,
+  productSelector,
+} from '../../modules/products';
 
-function ProductViewScreen({ navigation }) {
+function ProductViewScreen({ navigation, fetchProductId }) {
   const [slider, setSlider] = useState(0);
-  const store = useStore();
-  // const viewer = useViewer();
   const productId = navigation.getParam('productId');
-  // const collection = useProductsCollection();
-  const product = collection.get(productId);
-  const usersCollection = useUsersCollection();
-  const user = usersCollection.get(product.ownerId) || {};
-  const description =
-    product.description || 'Product have no description';
+  // const product = collection.get(productId);
+  // const user = usersCollection.get(product.ownerId) || {};
+  // const description =
+  //   product.description || 'Product have no description';
   // const isViewer = product.ownerId === viewer.user.id;
-
+  console.log('productId', productId);
   useEffect(() => {
+    const pro = fetchProductId(productId);
+    console.log('pro', pro);
+    // async function prod() {
+    //   const pro = await fetchProductId(productId);
+    //   console.log('pro', pro);
+    // }
+    // prod();
     // store.entities.users.fetchUserById.run(product.ownerId);
     // store.entities.products.fetchProductById.run(productId);
   }, []);
-
+  // console.log('productId', fetchProductId(productId));
   function openPhone() {
     Linking.openURL(`tel:`);
   }
@@ -85,7 +87,7 @@ function ProductViewScreen({ navigation }) {
           <Entypo name="share" size={30} style={s.icon} />
         </TouchableOpacity>
       </LinearGradient>
-      <ScrollView style={s.containerBetween}>
+      {/* <ScrollView style={s.containerBetween}>
         <View style={s.containerPhotos}>
           {product.photos && product.photos.length > 0 ? (
             <Carousel
@@ -156,7 +158,7 @@ function ProductViewScreen({ navigation }) {
             </TouchableOpacity>
           </View>
         </View>
-      </ScrollView>
+      </ScrollView> */}
       {/* {!isViewer && (
         <View style={s.containerPhoneMessage}>
           <TouchableOpacity
@@ -215,12 +217,13 @@ ProductViewScreen.navigationOptions = () => ({
 
 ProductViewScreen.propTypes = {
   navigation: T.object,
+  fetchProductId: T.func,
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, productId) {
   return {
-    items: state.products.latestProducts.items,
-    isLoading: state.products.latestProducts.isLoading,
+    product: productSelector.getProduct(state, productId),
+    isLoading: state.products.getByProductId.isLoading,
   };
 }
 
@@ -231,4 +234,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(memo(ProductViewScreen));
+)(ProductViewScreen);

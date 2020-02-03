@@ -1,5 +1,6 @@
+import { normalize } from 'normalizr';
 import * as actions from './productsActions';
-import Api from '../../Api';
+import Api, { schema } from '../../Api';
 import { NavigationService } from '../../services';
 
 export function fetchLatestProducts() {
@@ -7,7 +8,12 @@ export function fetchLatestProducts() {
     try {
       dispatch(actions.latestProducts.start());
       const res = await Api.Products.fetchLatest();
-      dispatch(actions.latestProducts.success(res.data));
+
+      const { result, entities } = normalize(
+        res.data,
+        schema.ProductList,
+      );
+      dispatch(actions.latestProducts.success({ result, entities }));
     } catch (err) {
       dispatch(
         actions.latestProducts.error({ message: err.message }),
@@ -37,13 +43,14 @@ export function fetchMoreLatest() {
   };
 }
 
-export function fetchProductId(id) {
+export function fetchProductId(productId) {
   return async function fetchProductIdThunk(dispatch) {
     try {
-      dispatch(actions.getByProductId.start());
+      dispatch(actions.latestProducts.start());
+      const res = await Api.Products.getById(productId);
 
-      const res = await Api.Products.getById(id);
-      dispatch(actions.getByProductId.success(res.data));
+      const { entities } = normalize(res.data, schema.Product);
+      dispatch(actions.getByProductId.success({ entities }));
     } catch (err) {
       dispatch(
         actions.getByProductId.error({ message: err.message }),
@@ -71,6 +78,20 @@ export function createProduct({
       NavigationService.navigateToApp();
     } catch (e) {
       console.log(e);
+    }
+  };
+}
+
+export function fetchSavedProducts() {
+  return async function fetchSavedProductsThunk(dispatch) {
+    try {
+      dispatch(actions.savedProducts.start());
+
+      const res = await Api.Products.fetchSaved();
+
+      dispatch(actions.savedProducts.success(res.data));
+    } catch (err) {
+      dispatch(actions.savedProducts.error({ message: err.message }));
     }
   };
 }

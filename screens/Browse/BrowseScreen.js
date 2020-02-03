@@ -11,7 +11,7 @@ import gStyles from '../../styles/styles';
 import colors from '../../styles/colors';
 import ListFooter from '../../components/ProductList/ListFooter/ListFooter';
 import SearchView from '../../components/Filters/SearchView/SearchView';
-import { productsOperations } from '../../modules/products';
+import { productsOperations, productSelector } from '../../modules/products';
 
 function BrowseScreen({
   items,
@@ -66,7 +66,11 @@ BrowseScreen.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    items: state.products.latestProducts.items,
+    // items: productSelector.getLatest(state),
+    items: state.products.latestProducts.items.map(
+      (i) => state.entities.products[i],
+    ),
+    // items: state.products.latestProducts.items,
     isLoading: state.products.latestProducts.isLoading,
   };
 }
