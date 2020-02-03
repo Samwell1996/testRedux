@@ -5,7 +5,6 @@ const styles = StyleSheet.create({
   plusCircle: {
     zIndex: 15,
     color: colors.primary,
-    marginBottom: 3,
     top: -1,
   },
   sliceImage: {
@@ -28,6 +27,10 @@ const styles = StyleSheet.create({
     marginTop: 27,
     width: '20%',
     opacity: 1,
+  },
+  fixTabBottomCircle: {
+    color: colors.white,
+    width: 100,
   },
   plusBottom: {
     marginTop: 10,

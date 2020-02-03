@@ -112,13 +112,14 @@ const routes = {
                 style={style.plusCircle}
               />
             </View>
-            <View style={style.plusVisibleCircle} />
           </View>
         );
       },
       tabBarLabel: () => (
         <View>
-          <View style={style.plusBottom} />
+          <View style={style.plusBottom}>
+            <Text style={style.fixTabBottomCircle}>1</Text>
+          </View>
         </View>
       ),
     },

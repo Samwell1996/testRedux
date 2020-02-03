@@ -14,6 +14,12 @@ const INITIAL_STATE = {
     isError: false,
     error: null,
   },
+  savedProducts: {
+    items: [],
+    isLoading: false,
+    isError: false,
+    error: null,
+  },
 };
 
 export default handleActions(
@@ -44,32 +50,58 @@ export default handleActions(
         isError: true,
       },
     }),
-    // [actions.getByProductId.start]: (state) => ({
-    //   ...state,
-    //   getByProductId: {
-    //     ...state.getByProductId,
-    //     isLoading: true,
-    //     error: null,
-    //     isError: false,
-    //   },
-    // }),
-    // [actions.getByProductId.success]: (state, action) => ({
-    //   ...state,
-    //   getByProductId: {
-    //     ...state.getByProductId,
-    //     isLoading: false,
-    //     items: action.payload,
-    //   },
-    // }),
-    // [actions.getByProductId.error]: (state, action) => ({
-    //   ...state,
-    //   getByProductId: {
-    //     ...state.getByProductId,
-    //     isLoading: false,
-    //     error: action.payload,
-    //     isError: true,
-    //   },
-    // }),
+    [actions.getByProductId.start]: (state) => ({
+      ...state,
+      getByProductId: {
+        ...state.getByProductId,
+        isLoading: true,
+        error: null,
+        isError: false,
+      },
+    }),
+    [actions.getByProductId.success]: (state, action) => ({
+      ...state,
+      getByProductId: {
+        ...state.getByProductId,
+        isLoading: false,
+        items: action.payload,
+      },
+    }),
+    [actions.getByProductId.error]: (state, action) => ({
+      ...state,
+      getByProductId: {
+        ...state.getByProductId,
+        isLoading: false,
+        error: action.payload,
+        isError: true,
+      },
+    }),
+    [actions.savedProducts.start]: (state) => ({
+      ...state,
+      savedProducts: {
+        ...state.savedProducts,
+        isLoading: true,
+        error: null,
+        isError: false,
+      },
+    }),
+    [actions.savedProducts.success]: (state, action) => ({
+      ...state,
+      savedProducts: {
+        ...state.savedProducts,
+        isLoading: false,
+        items: action.payload,
+      },
+    }),
+    [actions.savedProducts.error]: (state, action) => ({
+      ...state,
+      savedProducts: {
+        ...state.savedProducts,
+        isLoading: false,
+        error: action.payload,
+        isError: true,
+      },
+    }),
   },
   INITIAL_STATE,
 );
