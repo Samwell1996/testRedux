@@ -12,7 +12,6 @@ import InputAuth from '../../../components/Auth/InputAuth/InputAuth';
 import Bottom from '../../../components/Auth/Bottom/Bottom';
 import screens from '../../../navigation/screens';
 import { authOperations } from '../../../modules/auth';
-// import { useStore } from '../../../stores/createStore';
 import { s } from '../styles';
 import gStyles from '../../../styles/styles';
 
@@ -21,11 +20,7 @@ function LoginScreen({ navigation, login }) {
     email,
     password,
   });
-  // const store = useStore();
 
-  // async function onSubmit({ email, password }) {
-  //   await store.auth.login.run({ email, password });
-  // }
   async function onSubmit({ email, password }) {
     login({ email, password });
     console.log({ email, password });

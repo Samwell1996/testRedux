@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { observer } from 'mobx-react';
 import T from 'prop-types';
 import notFound from '../../../assets/not-found.png';
 import { s } from './styles';
@@ -73,4 +72,4 @@ ProductItem.propTypes = {
   item: T.object,
 };
 
-export default observer(ProductItem);
+export default memo(ProductItem);

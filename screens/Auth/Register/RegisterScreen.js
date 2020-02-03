@@ -1,6 +1,5 @@
 import React, { memo } from 'react';
 import { KeyboardAvoidingView, View } from 'react-native';
-import { observer } from 'mobx-react';
 import { connect } from 'react-redux';
 import { Formik } from 'formik';
 import T from 'prop-types';
@@ -15,7 +14,6 @@ import { authOperations } from '../../../modules/auth';
 import InputAuth from '../../../components/Auth/InputAuth/InputAuth';
 import Bottom from '../../../components/Auth/Bottom/Bottom';
 import { s } from '../styles';
-import { useStore } from '../../../stores/createStore';
 import NavigationService from '../../../services/NavigationServices';
 import gStyles from '../../../styles/styles';
 
@@ -26,7 +24,6 @@ function RegisterScreen({ navigation, register }) {
     passwordAgain: password,
     fullName,
   });
-  const store = useStore();
 
   async function onSubmit({ email, password, fullName }) {
     register({ email, password, fullName });

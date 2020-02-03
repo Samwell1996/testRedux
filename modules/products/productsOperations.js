@@ -1,4 +1,4 @@
-import * as actions from './latestProductsActions';
+import * as actions from './productsActions';
 import Api from '../../Api';
 import { NavigationService } from '../../services';
 

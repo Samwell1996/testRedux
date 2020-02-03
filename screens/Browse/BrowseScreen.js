@@ -1,10 +1,8 @@
-import React, { useEffect, useState, memo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, View } from 'react-native';
-import { observer } from 'mobx-react';
 import { FontAwesome } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import T from 'prop-types';
-import { useStore } from '../../stores/createStore';
 import ProductList from '../../components/ProductList/ProductList';
 import Header from '../../components/Header/Header';
 import Search from '../../components/Header/Search/Search';
@@ -13,7 +11,7 @@ import gStyles from '../../styles/styles';
 import colors from '../../styles/colors';
 import ListFooter from '../../components/ProductList/ListFooter/ListFooter';
 import SearchView from '../../components/Filters/SearchView/SearchView';
-import { latestProductsOperations } from '../../modules/latestProducts';
+import { productsOperations } from '../../modules/products';
 
 function BrowseScreen({
   items,
@@ -21,11 +19,8 @@ function BrowseScreen({
   isLoading,
   fetchMoreLatest,
 }) {
-  const store = useStore();
-
   const [search, setSearch] = useState('');
   useEffect(() => {
-    // store.latestProducts.fetchLatest.run();
     fetchLatest();
   }, []);
   return (
@@ -71,19 +66,17 @@ BrowseScreen.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    items: state.latestProducts.latestProducts.items,
-    isLoading: state.latestProducts.latestProducts.isLoading,
+    items: state.products.latestProducts.items,
+    isLoading: state.products.latestProducts.isLoading,
   };
 }
 
 const mapDispatchToProps = {
-  fetchLatest: latestProductsOperations.fetchLatestProducts,
-  fetchMore: latestProductsOperations.fetchMoreLatest,
+  fetchLatest: productsOperations.fetchLatestProducts,
+  fetchMore: productsOperations.fetchMoreLatest,
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(memo(BrowseScreen));
-
-// export default memo(BrowseScreen);
+)(BrowseScreen);

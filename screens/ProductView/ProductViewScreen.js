@@ -6,7 +6,6 @@ import {
   View,
   Image,
 } from 'react-native';
-import { observer } from 'mobx-react';
 import { Linking } from 'expo';
 import { connect } from 'react-redux';
 import ViewMoreText from 'react-native-view-more-text';
@@ -33,7 +32,7 @@ import { useUsersCollection } from '../../stores/Users/UsersCollection';
 import LoadingComponent from '../../components/ProductView/LoadingComponent/LoadingComponent';
 import screens from '../../navigation/screens';
 import { useViewer } from '../../stores/ViewerStore';
-import { latestProductsOperations } from '../../modules/latestProducts';
+import { productsOperations } from '../../modules/products';
 
 function ProductViewScreen({ navigation }) {
   const [slider, setSlider] = useState(0);
@@ -220,18 +219,16 @@ ProductViewScreen.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    items: state.latestProducts.latestProducts.items,
-    isLoading: state.latestProducts.latestProducts.isLoading,
+    items: state.products.latestProducts.items,
+    isLoading: state.products.latestProducts.isLoading,
   };
 }
 
 const mapDispatchToProps = {
-  fetchProductId: latestProductsOperations.fetchProductId,
+  fetchProductId: productsOperations.fetchProductId,
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(memo(ProductViewScreen));
-
-// export default observer(ProductViewScreen);

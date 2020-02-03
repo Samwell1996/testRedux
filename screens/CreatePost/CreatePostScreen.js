@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, memo } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   Text,
   View,
@@ -15,22 +15,19 @@ import {
   Entypo,
   MaterialIcons,
 } from '@expo/vector-icons';
-import { observer } from 'mobx-react';
 import T from 'prop-types';
 import { useFormik } from 'formik';
 import ActionSheet from 'react-native-actionsheet';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
-import { useStore } from '../../stores/createStore';
 import NavigationService from '../../services/NavigationServices';
 import screens from '../../navigation/screens';
 import Api from '../../Api';
 import { s } from './styles';
 import colors from '../../styles/colors';
-import { latestProductsOperations } from '../../modules/latestProducts';
+import { productsOperations } from '../../modules/products';
 
 function CreatePostScreen({ navigation, createProduct }) {
-  const store = useStore();
   const actionRef = useRef();
   const [isSwitch, setIsSwitch] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
@@ -293,12 +290,12 @@ CreatePostScreen.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    isLoading: state.latestProducts.latestProducts.isLoading,
+    isLoading: state.productsOperations.latestProducts.isLoading,
   };
 }
 
 const mapDispatchToProps = {
-  fetchLatest: latestProductsOperations.createProduct,
+  fetchLatest: productsOperations.createProduct,
 };
 
 export default connect(

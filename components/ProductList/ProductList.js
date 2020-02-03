@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { FlatList, View } from 'react-native';
-import { observer } from 'mobx-react';
 import T from 'prop-types';
 import { s } from './styles';
 import ProductItem from './ProductItem/ProductItem';
@@ -23,8 +22,8 @@ function ProductList({ navigation, style, store, ...props }) {
 }
 ProductList.propTypes = {
   style: T.object,
-  store: T.object,
+  store: T.array,
   navigation: T.object,
 };
 
-export default observer(ProductList);
+export default memo(ProductList);
