@@ -46,7 +46,8 @@ function ProductViewScreen({ navigation, fetchProductId }) {
     const pro = fetchProductId(productId);
     console.log('pro', pro);
     // async function prod() {
-    //   const pro = await fetchProductId(productId);
+    //   const pro = await fetchProductId(productId);getProduct(id);
+    
     //   console.log('pro', pro);
     // }
     // prod();
