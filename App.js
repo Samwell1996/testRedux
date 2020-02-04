@@ -1,3 +1,4 @@
+import ReactotronConfig from './ReactotronConfig';
 import React, { useEffect } from 'react';
 import { View, YellowBox } from 'react-native';
 import { Provider } from 'react-redux';
@@ -8,6 +9,10 @@ import store, { createPersist } from './storeRx/store';
 import { appOperations } from './modules/app';
 
 SplashScreen.preventAutoHide();
+
+if(__DEV__) {
+  import('./ReactotronConfig').then(() => console.log('Reactotron Configured'))
+}
 
 export default function App() {
   useEffect(() => {

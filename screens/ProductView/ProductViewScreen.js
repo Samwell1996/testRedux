@@ -41,18 +41,10 @@ function ProductViewScreen({ navigation, fetchProductId }) {
   // const description =
   //   product.description || 'Product have no description';
   // const isViewer = product.ownerId === viewer.user.id;
+
   console.log('productId', productId);
   useEffect(() => {
-    const pro = fetchProductId(productId);
-    console.log('pro', pro);
-    // async function prod() {
-    //   const pro = await fetchProductId(productId);getProduct(id);
-    
-    //   console.log('pro', pro);
-    // }
-    // prod();
-    // store.entities.users.fetchUserById.run(product.ownerId);
-    // store.entities.products.fetchProductById.run(productId);
+    fetchProductId(productId);
   }, []);
   // console.log('productId', fetchProductId(productId));
   function openPhone() {
@@ -221,12 +213,11 @@ ProductViewScreen.propTypes = {
   fetchProductId: T.func,
 };
 
-function mapStateToProps(state, productId) {
-  return {
-    product: productSelector.getProduct(state, productId),
-    isLoading: state.products.getByProductId.isLoading,
-  };
-}
+const mapStateToProps = (state, productId) => ({
+  // product: state.entities.products(productId),
+  // owner: productSelector.getProductOwner(state,),
+  isLoading: state.products.getByProductId.isLoading,
+});
 
 const mapDispatchToProps = {
   fetchProductId: productsOperations.fetchProductId,

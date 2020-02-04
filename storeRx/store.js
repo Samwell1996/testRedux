@@ -4,6 +4,7 @@ import { AsyncStorage } from 'react-native';
 import thunk from 'redux-thunk';
 import devToolsEnhancer from 'remote-redux-devtools';
 import appReducer from '../modules';
+import Reactotron from '../ReactotronConfig';
 
 const config = {
   key: 'root',
@@ -14,6 +15,7 @@ const config = {
 const reducer = persistCombineReducers(config, appReducer);
 
 const enhancer = compose(
+  Reactotron.createEnhancer(),
   applyMiddleware(thunk),
   devToolsEnhancer({
     realtime: true,

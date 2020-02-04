@@ -46,7 +46,7 @@ export function fetchMoreLatest() {
 export function fetchProductId(productId) {
   return async function fetchProductIdThunk(dispatch) {
     try {
-      dispatch(actions.latestProducts.start());
+      dispatch(actions.getByProductId.start());
       const res = await Api.Products.getById(productId);
 
       const { entities } = normalize(res.data, schema.Product);

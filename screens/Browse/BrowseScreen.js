@@ -66,11 +66,7 @@ BrowseScreen.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    // items: productSelector.getLatest(state),
-    items: state.products.latestProducts.items.map(
-      (i) => state.entities.products[i],
-    ),
-    // items: state.products.latestProducts.items,
+    items: productSelector.getLatest(state),
     isLoading: state.products.latestProducts.isLoading,
   };
 }
