@@ -15,11 +15,16 @@ export const getProduct = createSelector(
 );
 
 export const getProductOwner = createSelector(
-    (state, id) => {
-        const users = getUserEntities(state);
-        const products = getProductEntities(state);
-        const product = products[id];
-        return users[product.owner || product.ownerId]
-    },
-    (item) => item,
+  (state, id) => getUserEntities(state)[id] || {},
+  (item) => item,
 );
+
+// export const getProductOwner = createSelector(
+//   (state, id) => {
+//     const users = getUserEntities(state);
+//     const products = getProductEntities(state);
+//     const product = products[id];
+//     return users[product.owner || product.ownerId || ownerID];
+//   },
+//   (item) => item,
+// );

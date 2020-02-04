@@ -28,6 +28,7 @@ function ProductItem({ item }) {
           onPress={() =>
             NavigationServices.navigate(screens.ProductView, {
               productId: item.id,
+              ownerId: item.ownerId,
             })
           }
         >
@@ -44,6 +45,7 @@ function ProductItem({ item }) {
           onPress={() =>
             NavigationServices.navigate(screens.ProductView, {
               productId: item.id,
+              ownerId: item.ownerId,
             })
           }
         >

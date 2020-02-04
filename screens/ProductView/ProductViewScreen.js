@@ -32,21 +32,40 @@ import {
   productsOperations,
   productSelector,
 } from '../../modules/products';
+import { viewerOperations } from '../../modules/viewer';
+import {
+  createDate,
+  getInitials,
+  getFirstName,
+} from '../../modules/utils/utils';
 
-function ProductViewScreen({ navigation, fetchProductId }) {
+function ProductViewScreen({
+  navigation,
+  fetchProductId,
+  product,
+  owner,
+  fetchOwnerId,
+  fetchUser,
+  isLoadingOwner,
+  userId,
+}) {
   const [slider, setSlider] = useState(0);
   const productId = navigation.getParam('productId');
-  // const product = collection.get(productId);
-  // const user = usersCollection.get(product.ownerId) || {};
-  // const description =
-  //   product.description || 'Product have no description';
-  // const isViewer = product.ownerId === viewer.user.id;
+  const ownerID = navigation.getParam('ownerId');
 
-  console.log('productId', productId);
+  const description =
+    product.description || 'Product have no description';
+  const isViewer = ownerID === userId;
+  const date = createDate(product.createdAt) || '';
+  const initials = getInitials(owner);
+  const firstName = getFirstName(owner);
+
   useEffect(() => {
     fetchProductId(productId);
+    fetchOwnerId(ownerID);
+    fetchUser();
   }, []);
-  // console.log('productId', fetchProductId(productId));
+
   function openPhone() {
     Linking.openURL(`tel:`);
   }
@@ -80,7 +99,7 @@ function ProductViewScreen({ navigation, fetchProductId }) {
           <Entypo name="share" size={30} style={s.icon} />
         </TouchableOpacity>
       </LinearGradient>
-      {/* <ScrollView style={s.containerBetween}>
+      <ScrollView style={s.containerBetween}>
         <View style={s.containerPhotos}>
           {product.photos && product.photos.length > 0 ? (
             <Carousel
@@ -104,7 +123,7 @@ function ProductViewScreen({ navigation, fetchProductId }) {
               inactiveDotScale={0.6}
             />
           </View>
-          <Text style={s.date}>{product.date()}</Text>
+          <Text style={s.date}>{date}</Text>
           <Text style={s.title}>{product.title}</Text>
           <Text style={s.price}>${product.price}</Text>
         </View>
@@ -130,14 +149,12 @@ function ProductViewScreen({ navigation, fetchProductId }) {
           <View style={s.line} />
         </View>
         <View style={s.containerBottom}>
-          <LoadingComponent
-            fetch={store.entities.users.fetchUserById.isLoading}
-          />
+          <LoadingComponent fetch={isLoadingOwner} />
           <View style={s.containerAvatar}>
-            <Text style={s.textAvatar}>{user.initials}</Text>
+            <Text style={s.textAvatar}>{initials}</Text>
           </View>
           <View>
-            <Text style={s.textFullName}>{user.fullName}</Text>
+            <Text style={s.textFullName}>{owner.fullName}</Text>
             <TouchableOpacity
               onPress={() =>
                 NavigationService.navigate(screens.UserProducts, {
@@ -146,13 +163,13 @@ function ProductViewScreen({ navigation, fetchProductId }) {
               }
             >
               <Text style={s.textPosts}>
-                See all {user.firstName}’s posts
+                See all {firstName}’s posts
               </Text>
             </TouchableOpacity>
           </View>
         </View>
-      </ScrollView> */}
-      {/* {!isViewer && (
+      </ScrollView>
+      {!isViewer && (
         <View style={s.containerPhoneMessage}>
           <TouchableOpacity
             activeOpacity={0.7}
@@ -198,7 +215,7 @@ function ProductViewScreen({ navigation, fetchProductId }) {
             <Image source={sliceBlue} style={s.imageComponentBlue} />
           </TouchableOpacity>
         </View>
-      )} */}
+      )}
     </View>
   );
 }
@@ -211,16 +228,29 @@ ProductViewScreen.navigationOptions = () => ({
 ProductViewScreen.propTypes = {
   navigation: T.object,
   fetchProductId: T.func,
+  product: T.object,
+  owner: T.object,
+  fetchOwnerId: T.func,
+  fetchUser: T.func,
+  isLoadingOwner: T.func,
+  userId: T.string,
 };
 
-const mapStateToProps = (state, productId) => ({
-  // product: state.entities.products(productId),
-  // owner: productSelector.getProductOwner(state,),
-  isLoading: state.products.getByProductId.isLoading,
-});
-
+const mapStateToProps = (state, props) => {
+  const productID = props.navigation.getParam('productId');
+  const ownerID = props.navigation.getParam('ownerId');
+  return {
+    product: productSelector.getProduct(state, productID),
+    owner: productSelector.getProductOwner(state, ownerID),
+    userId: state.viewer.user.id,
+    isLoading: state.products.getByProductId.isLoading,
+    isLoadingOwner: state.viewer.fetchViewer.isLoading,
+  };
+};
 const mapDispatchToProps = {
   fetchProductId: productsOperations.fetchProductId,
+  fetchOwnerId: viewerOperations.fetchViewerId,
+  fetchUser: viewerOperations.fetchViewer,
 };
 
 export default connect(

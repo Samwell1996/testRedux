@@ -48,7 +48,6 @@ export function fetchProductId(productId) {
     try {
       dispatch(actions.getByProductId.start());
       const res = await Api.Products.getById(productId);
-
       const { entities } = normalize(res.data, schema.Product);
       dispatch(actions.getByProductId.success({ entities }));
     } catch (err) {

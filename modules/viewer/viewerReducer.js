@@ -37,7 +37,7 @@ export default handleActions(
     }),
     [actions.fetchViewer.error]: (state, action) => ({
       ...state,
-      etchViewer: {
+      fetchViewer: {
         ...state.fetchViewer,
         isLoading: false,
         error: action.payload,
