@@ -16,11 +16,9 @@ import { authOperations } from '../../modules/auth';
 import gStyles from '../../styles/styles';
 import screens from '../../navigation/screens';
 import image from '../../assets/Logo.png';
-import { useStore } from '../../stores/createStore';
 
 function SettingScreen({ navigation, logout }) {
   const [isWebView, setIsWebView] = useState(false);
-  const store = useStore();
 
   function isLogout() {
     logout();

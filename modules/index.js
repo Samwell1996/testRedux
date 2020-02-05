@@ -3,6 +3,8 @@ import auth from './auth';
 import viewer from './viewer';
 import products from './products';
 import entities from './entities';
+import chats from './chats';
+import messages from './messages';
 
 export default {
   app,
@@ -10,4 +12,6 @@ export default {
   viewer,
   products,
   entities,
+  chats,
+  messages,
 };
