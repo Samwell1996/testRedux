@@ -1,40 +1,39 @@
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
-import { observer } from 'mobx-react';
 import T from 'prop-types';
+import { connect } from 'react-redux';
 import HeaderUser from '../../components/Header/HeaderUser/HeaderUser';
-import { useUsersCollection } from '../../stores/Users/UsersCollection';
 import ProductList from '../../components/ProductList/ProductList';
-import { useViewer } from '../../stores/ViewerStore';
-import { useStore } from '../../stores/createStore';
 import gStyles from '../../styles/styles';
 import { s } from './styles';
+import { viewerOperations } from '../../modules/viewer';
+import {
+  productsOperations,
+  productSelector,
+} from '../../modules/products';
 
-function UserProductScreen({ navigation }) {
-  const store = useStore();
+function UserProductScreen({
+  navigation,
+  fetchOwnProducts,
+  fetchOwnerId,
+  isLoading,
+  owner,
+  items,
+}) {
   const ownerId = navigation.getParam('ownerId');
-  const usersCollection = useUsersCollection();
-  const user = usersCollection.get(ownerId) || {};
-  const viewer = useViewer();
-  const ownProducts = viewer.user.ownProducts;
 
   useEffect(() => {
-    store.entities.users.fetchUserById.run(ownerId);
-    ownProducts.fetchOwnProducts.run(ownerId);
+    fetchOwnProducts(ownerId);
+    fetchOwnerId(ownerId);
   }, []);
-
   return (
     <View>
-      <HeaderUser
-        userInitials={user.initials}
-        userFullName={user.fullName}
-      />
+      <HeaderUser userInitials="A B" userFullName={owner.fullName} />
       <View style={s.containerProducts}>
         <ProductList
-          onRefresh={() => ownProducts.fetchOwnProducts.run(ownerId)}
-          refreshing={ownProducts.fetchOwnProducts.isLoading}
-          store={ownProducts}
-          onItemPress={() => {}}
+          onRefresh={() => fetchOwnProducts(ownerId)}
+          refreshing={isLoading}
+          store={items}
         />
       </View>
     </View>
@@ -48,6 +47,28 @@ UserProductScreen.navigationOptions = () => ({
 
 UserProductScreen.propTypes = {
   navigation: T.object,
+  fetchOwnProducts: T.func,
+  fetchOwnerId: T.func,
+  owner: T.object,
+  items: T.array,
+  isLoading: T.func,
 };
 
-export default observer(UserProductScreen);
+const mapStateToProps = (state, props) => {
+  const ownerID = props.navigation.getParam('ownerId');
+  return {
+    items: productSelector.getListProductsOwner(state, ownerID),
+    owner: productSelector.getProductOwner(state, ownerID),
+    isLoading: state.products.ownProducts.isLoading,
+    isLoadingOwner: state.viewer.fetchViewer.isLoading,
+  };
+};
+const mapDispatchToProps = {
+  fetchOwnProducts: productsOperations.fetchOwnProducts,
+  fetchOwnerId: viewerOperations.fetchViewerId,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(UserProductScreen);

@@ -3,9 +3,16 @@ import { createSelector } from 'reselect';
 const getProductEntities = (state) => state.entities.products;
 const getLatestIds = (state) => state.products.latestProducts.items;
 const getUserEntities = (state) => state.entities.users;
+const getUserProductsIds = (state) =>
+  state.products.ownProducts.items;
 
 export const getLatest = createSelector(
   [getProductEntities, getLatestIds],
+  (entities, ids) => ids.map((i) => entities[i]),
+);
+
+export const getListProductsOwner = createSelector(
+  [getProductEntities, getUserProductsIds],
   (entities, ids) => ids.map((i) => entities[i]),
 );
 

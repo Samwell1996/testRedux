@@ -1,24 +1,31 @@
 import React, { useEffect } from 'react';
 import { TouchableOpacity, Text, View, Image } from 'react-native';
-import { observer } from 'mobx-react';
+import { connect } from 'react-redux';
 import T from 'prop-types';
 import { Ionicons } from '@expo/vector-icons';
 import screens from '../../navigation/screens';
 import { s } from './styles';
 import colors from '../../styles/colors';
-// import { useViewer } from '../../stores/ViewerStore';
+import { viewerOperations } from '../../modules/viewer';
+import {
+  productsOperations,
+  productSelector,
+} from '../../modules/products';
+import { getInitials } from '../../modules/utils/utils';
 // import image from '../../assets/box.png';
 // import ProductList from '../../components/ProductList/ProductList';
 
-function ProfileScreen({ navigation }) {
+function ProfileScreen({ navigation, user }) {
+  console.log(user);
 
+  const initials = getInitials(user);
   return (
     <View style={s.container}>
       <View style={s.containerHeader}>
         <View style={s.containerAvatar}>
-          <Text style={s.textAvatar}>initials</Text>
+          <Text style={s.textAvatar}>{initials}</Text>
         </View>
-        <Text style={s.textFullName}>name</Text>
+        <Text style={s.textFullName}>{user.fullName}</Text>
         <View style={s.containerTextInfo}>
           <Text style={s.textInfoFirst}>active: </Text>
           <Text style={s.textInfoSecond}>145</Text>
@@ -69,6 +76,22 @@ ProfileScreen.navigationOptions = () => ({
 
 ProfileScreen.propTypes = {
   navigation: T.object,
+  user: T.object,
 };
 
-export default observer(ProfileScreen);
+const mapStateToProps = (state, props) => {
+  return {
+    // items: productSelector.getProductsOwner(state, ownerID),
+    user: state.viewer.user,
+    isLoading: state.products.ownProducts.isLoading,
+  };
+};
+const mapDispatchToProps = {
+  fetchOwnProducts: productsOperations.fetchOwnProducts,
+  fetchUser: viewerOperations.fetchViewer,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ProfileScreen);

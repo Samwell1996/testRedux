@@ -5,9 +5,6 @@ export function createDate(createdAt) {
 }
 
 export function getInitials(owner) {
-  if (owner || owner.fullName === 'undefined') {
-    return '';
-  }
   let i = '';
   const fullName = owner.fullName.split(' ');
   if (fullName.length === 1) {
@@ -27,11 +24,7 @@ export function getInitials(owner) {
 //   return `${firstName}`;
 // }
 
-export function getFirstName(owner) {
-  console.log(owner.fullName, 'ownerF');
-  if (owner || owner.fullName === 'undefined') {
-    return '';
-  }
-  const [firstName] = owner.fullName.split(' ');
-  return `${firstName}`;
-}
+// export function getFirstName(owner) {
+//   const [firstName] = owner.fullName.split(' ');
+//   return `${firstName}`;
+// }

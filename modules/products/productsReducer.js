@@ -19,6 +19,12 @@ const INITIAL_STATE = {
     isError: false,
     error: null,
   },
+  ownProducts: {
+    items: [],
+    isLoading: false,
+    isError: false,
+    error: null,
+  },
 };
 
 export default handleActions(
@@ -71,6 +77,32 @@ export default handleActions(
         ...state.getByProductId,
         isLoading: false,
         error: action.payload,
+        isError: true,
+      },
+    }),
+    [actions.ownProducts.start]: (state) => ({
+      ...state,
+      ownProducts: {
+        ...state.ownProducts,
+        isLoading: true,
+        error: null,
+        isError: false,
+      },
+    }),
+    [actions.ownProducts.success]: (state, action) => ({
+      ...state,
+      ownProducts: {
+        ...state.ownProducts,
+        isLoading: false,
+        items: action.payload.result,
+      },
+    }),
+    [actions.ownProducts.error]: (state, action) => ({
+      ...state,
+      ownProducts: {
+        ...state.ownProducts,
+        isLoading: false,
+        error: action.payload.result,
         isError: true,
       },
     }),

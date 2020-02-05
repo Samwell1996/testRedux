@@ -33,11 +33,7 @@ import {
   productSelector,
 } from '../../modules/products';
 import { viewerOperations } from '../../modules/viewer';
-import {
-  createDate,
-  getInitials,
-  getFirstName,
-} from '../../modules/utils/utils';
+import { createDate, getInitials } from '../../modules/utils/utils';
 
 function ProductViewScreen({
   navigation,
@@ -57,8 +53,7 @@ function ProductViewScreen({
     product.description || 'Product have no description';
   const isViewer = ownerID === userId;
   const date = createDate(product.createdAt) || '';
-  const initials = getInitials(owner);
-  const firstName = getFirstName(owner);
+  // const initials = getInitials(owner);
 
   useEffect(() => {
     fetchProductId(productId);
@@ -83,7 +78,7 @@ function ProductViewScreen({
       </TouchableOpacity>
     );
   }
-
+  
   return (
     <View style={s.container}>
       <LinearGradient
@@ -151,7 +146,7 @@ function ProductViewScreen({
         <View style={s.containerBottom}>
           <LoadingComponent fetch={isLoadingOwner} />
           <View style={s.containerAvatar}>
-            <Text style={s.textAvatar}>{initials}</Text>
+            <Text style={s.textAvatar}>A C</Text>
           </View>
           <View>
             <Text style={s.textFullName}>{owner.fullName}</Text>
@@ -163,7 +158,7 @@ function ProductViewScreen({
               }
             >
               <Text style={s.textPosts}>
-                See all {firstName}’s posts
+                See all broszqpqls’s posts
               </Text>
             </TouchableOpacity>
           </View>

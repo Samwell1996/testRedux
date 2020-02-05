@@ -9,3 +9,4 @@ export const savedProducts = createAsyncActions(
 export const getByProductId = createAsyncActions(
   'products/getByProductId',
 );
+export const ownProducts = createAsyncActions('products/ownProducts');
