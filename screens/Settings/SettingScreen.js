@@ -1,4 +1,4 @@
-import React, { useState, memo } from 'react';
+import React, { useState } from 'react';
 import {
   Text,
   View,
@@ -120,4 +120,4 @@ function mapStateToProps(state) {
 export default connect(
   mapStateToProps,
   authOperations,
-)(memo(SettingScreen));
+)(SettingScreen);

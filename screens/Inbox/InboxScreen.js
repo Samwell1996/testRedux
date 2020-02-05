@@ -1,28 +1,27 @@
 import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import { FlatList, Image, Text, View } from 'react-native';
-import { observer } from 'mobx-react';
 import T from 'prop-types';
 import image from '../../assets/inbox.png';
-import { useStore } from '../../stores/createStore';
 import ChatItem from '../../components/ChatItem/ChatItem';
 import { s } from './styles';
 import gStyles from '../../styles/styles';
+import { chatOperations, chatSelectors } from '../../modules/chats';
 
-function InboxScreen(props) {
-  const store = useStore();
-
+function InboxScreen({ fetchChats, isLoading, items, ...props }) {
   useEffect(() => {
-    store.chats.fetchChats.run();
+    fetchChats();
   }, []);
+  console.log(items, 'items');
   return (
     <View style={s.container}>
-      {store.chats.items.length > 0 ? (
+      {items.length > 0 ? (
         <FlatList
           contentContainerStyle={s.list}
-          onRefresh={() => store.chats.fetchChats.run()}
-          refreshing={store.chats.fetchChats.isLoading}
+          onRefresh={() => fetchChats()}
+          refreshing={isLoading}
           keyExtractor={(item) => `${item.id}`}
-          data={store.chats.items.slice()}
+          data={items.slice()}
           renderItem={({ item }) => (
             <ChatItem item={item} rootProps={props} />
           )}
@@ -44,6 +43,23 @@ InboxScreen.navigationOptions = () => ({
   headerStyle: gStyles.header,
 });
 
-InboxScreen.propTypes = {};
+InboxScreen.propTypes = {
+  fetchChats: T.func,
+  isLoading: T.func,
+  items: T.array,
+};
 
-export default observer(InboxScreen);
+const mapStateToProps = (state) => {
+  return {
+    items: chatSelectors.getChats(state),
+    isLoading: state.chats.fetchChat.isLoading,
+  };
+};
+const mapDispatchToProps = {
+  fetchChats: chatOperations.fetchChat,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(InboxScreen);

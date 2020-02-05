@@ -3,6 +3,7 @@ import * as actions from './chatActions';
 
 const INITIAL_STATE = {
   fetchChat: {
+    items: [],
     isLoading: false,
     error: null,
     isError: false,
@@ -18,19 +19,29 @@ export default handleActions(
   {
     [actions.fetchChat.start]: (state) => ({
       ...state,
-      isLoading: true,
-      error: null,
-      isError: false,
+      fetchChat: {
+        ...state.fetchChat,
+        isLoading: true,
+        error: null,
+        isError: false,
+      },
     }),
-    [actions.fetchChat.success]: (state) => ({
-      ...state.fetchChat,
-      isLoading: true,
+    [actions.fetchChat.success]: (state, action) => ({
+      ...state,
+      fetchChat: {
+        ...state.fetchChat,
+        isLoading: false,
+        items: action.payload.result,
+      },
     }),
     [actions.fetchChat.error]: (state, action) => ({
-      ...state.fetchChat,
-      isLoading: false,
-      error: action.payload,
-      isError: true,
+      ...state,
+      fetchChat: {
+        ...state.fetchChat,
+        isLoading: false,
+        error: action.payload.result,
+        isError: true,
+      },
     }),
     [actions.createChat.start]: (state) => ({
       ...state,
