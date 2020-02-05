@@ -12,11 +12,21 @@ import {
   productSelector,
 } from '../../modules/products';
 import { getInitials } from '../../modules/utils/utils';
-// import image from '../../assets/box.png';
-// import ProductList from '../../components/ProductList/ProductList';
+import image from '../../assets/box.png';
+import ProductList from '../../components/ProductList/ProductList';
 
-function ProfileScreen({ navigation, user }) {
-  console.log(user);
+function ProfileScreen({
+  navigation,
+  user,
+  fetchOwnProducts,
+  items,
+  isLoading,
+}) {
+  console.log(items, 'itemsProfile');
+
+  useEffect(() => {
+    fetchOwnProducts(user.id);
+  }, []);
 
   const initials = getInitials(user);
   return (
@@ -47,14 +57,12 @@ function ProfileScreen({ navigation, user }) {
           />
         </TouchableOpacity>
       </View>
-      {/* {ownProducts.items.length > 0 ? (
+      {items.length > 0 ? (
         <View style={s.containerProducts}>
           <ProductList
-            onRefresh={() =>
-              ownProducts.fetchOwnProducts.run(viewer.user.id)
-            }
-            refreshing={ownProducts.fetchOwnProducts.isLoading}
-            store={ownProducts}
+            onRefresh={() => fetchOwnProducts(user.id)}
+            refreshing={isLoading}
+            store={items}
             onItemPress={() => {}}
           />
         </View>
@@ -65,7 +73,7 @@ function ProfileScreen({ navigation, user }) {
             User doesn’t sell anything yet
           </Text>
         </View>
-      )} */}
+      )}
     </View>
   );
 }
@@ -77,11 +85,17 @@ ProfileScreen.navigationOptions = () => ({
 ProfileScreen.propTypes = {
   navigation: T.object,
   user: T.object,
+  fetchOwnProducts: T.func,
+  items: T.array,
+  isLoading: T.func,
 };
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = (state) => {
   return {
-    // items: productSelector.getProductsOwner(state, ownerID),
+    items: productSelector.getListProductsOwner(
+      state,
+      state.viewer.user.id,
+    ),
     user: state.viewer.user,
     isLoading: state.products.ownProducts.isLoading,
   };

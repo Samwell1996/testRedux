@@ -59,10 +59,8 @@ export function fetchProductId(productId) {
 }
 
 export function fetchOwnProducts(ownerID) {
-  console.log('1own');
   return async function fetchOwnProductsThunk(dispatch) {
     try {
-      console.log('2own');
       dispatch(actions.ownProducts.start());
       console.log('3own');
       const res = await Api.Products.byUserId(ownerID);
@@ -72,9 +70,7 @@ export function fetchOwnProducts(ownerID) {
         schema.ProductList,
       );
       console.log('5own', result);
-      console.log('5own1', entities);
       dispatch(actions.ownProducts.success({ result, entities }));
-      console.log('6own');
     } catch (err) {
       dispatch(actions.ownProducts.error({ message: err.message }));
     }
