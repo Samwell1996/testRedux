@@ -46,7 +46,7 @@ function ChatScreen({
   const productId = navigation.getParam('productId');
 
   const [message, setMessage] = useState('');
-  
+
   let productPhoto = 'wrong';
   if (!!product && product.photos && product.photos.length) {
     productPhoto =
@@ -56,10 +56,9 @@ function ChatScreen({
   useEffect(() => {
     fetchProductId(productId);
     fetchOwnerId(ownerId);
-    fetchMessages(chatId);
-    // if (chatId && messages) {
-    //   messages.fetch.run(chatId);
-    // }
+    if (chatId && messages) {
+      fetchMessages(chatId);
+    }
   }, []);
 
   async function onSendMessage() {
