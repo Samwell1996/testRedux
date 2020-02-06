@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text, View } from 'react-native';
-import { observer } from 'mobx-react';
+import { connect } from 'react-redux';
 import T from 'prop-types';
 import { s } from './styles';
-import { useStore } from '../../stores/createStore';
+import { viewerOperations } from '../../modules/viewer';
+import { createDateMessages } from '../../modules/utils/utils';
 
-function MessagesItem({ item }) {
-  const store = useStore();
-  const viewer = store.viewer.user.id;
-
+function MessagesItem({ item, fetchUser, viewer }) {
   const isOwner = viewer === item.ownerId;
+  useEffect(() => {
+    fetchUser();
+  }, []);
   return (
     <View style={isOwner ? s.ownerContainer : s.userContainer}>
       <View style={isOwner ? s.owner : s.user}>
@@ -17,7 +18,7 @@ function MessagesItem({ item }) {
           {item.text}
         </Text>
         <Text style={isOwner ? s.ownerDate : s.userDate}>
-          {item.date()}
+          {createDateMessages(item.createdAt)}
         </Text>
       </View>
     </View>
@@ -25,6 +26,22 @@ function MessagesItem({ item }) {
 }
 MessagesItem.propTypes = {
   item: T.object,
+  viewer: T.string,
+  fetchUser: T.func,
 };
 
-export default observer(MessagesItem);
+const mapStateToProps = (state) => {
+  return {
+    isLoadingMessage: state.messages.fetchMessage.isLoading,
+    viewer: state.viewer.user.id,
+  };
+};
+
+const mapDispatchToProps = {
+  fetchUser: viewerOperations.fetchViewer,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(MessagesItem);

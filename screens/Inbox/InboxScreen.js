@@ -12,7 +12,7 @@ function InboxScreen({ fetchChats, isLoading, items, ...props }) {
   useEffect(() => {
     fetchChats();
   }, []);
-  console.log(items, 'items');
+
   return (
     <View style={s.container}>
       {items.length > 0 ? (
@@ -45,7 +45,7 @@ InboxScreen.navigationOptions = () => ({
 
 InboxScreen.propTypes = {
   fetchChats: T.func,
-  isLoading: T.func,
+  isLoading: T.bool,
   items: T.array,
 };
 

@@ -8,13 +8,10 @@ import {
   TextInput,
   KeyboardAvoidingView,
 } from 'react-native';
+import { connect } from 'react-redux';
 import T from 'prop-types';
-import { observer } from 'mobx-react';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import HeaderUser from '../../components/Header/HeaderUser/HeaderUser';
-import { useUsersCollection } from '../../stores/Users/UsersCollection';
-import { useProductsCollection } from '../../stores/Products/ProductCollection';
-import { useStore } from '../../stores/createStore';
 import { NavigationService } from '../../services';
 import MessagesItem from '../../components/MessagesItem/MessagesItem';
 import screens from '../../navigation/screens';
@@ -22,37 +19,47 @@ import image from '../../assets/inbox.png';
 import notFound from '../../assets/image-not-found.jpg';
 import { s } from './styles';
 import colors from '../../styles/colors';
+import {
+  productsOperations,
+  productSelector,
+} from '../../modules/products';
+import { viewerOperations } from '../../modules/viewer';
+import {
+  messageOperations,
+  messageSelectors,
+} from '../../modules/messages';
+import { getInitials } from '../../modules/utils/utils';
 
-function ChatScreen({ navigation, ...props }) {
+function ChatScreen({
+  product,
+  fetchProductId,
+  fetchOwnerId,
+  fetchMessages,
+  isLoadingMessage,
+  navigation,
+  owner,
+  messages,
+  ...props
+}) {
   const ownerId = navigation.getParam('ownerId');
   const chatId = navigation.getParam('chatId');
   const productId = navigation.getParam('productId');
-  const userId = navigation.getParam('userId');
-
-  const store = useStore();
-  const productCollection = useProductsCollection();
-  const usersCollection = useUsersCollection();
-
-  const product = productCollection.get(productId) || {};
-  const owner = usersCollection.get(ownerId) || {};
-  const user = usersCollection.get(userId) || {};
-  const chat = store.entities.chats.get(chatId) || {};
-  const messages = chat ? chat.messages : null;
 
   const [message, setMessage] = useState('');
-
+  
   let productPhoto = 'wrong';
-  if (product.photos && product.photos.length) {
+  if (!!product && product.photos && product.photos.length) {
     productPhoto =
       product.photos[0] || product.photos[1] || product.photos[2];
   }
 
   useEffect(() => {
-    store.entities.users.fetchUserById.run(ownerId);
-    store.entities.products.fetchProductById.run(productId);
-    if (chatId && messages) {
-      messages.fetch.run(chatId);
-    }
+    fetchProductId(productId);
+    fetchOwnerId(ownerId);
+    fetchMessages(chatId);
+    // if (chatId && messages) {
+    //   messages.fetch.run(chatId);
+    // }
   }, []);
 
   async function onSendMessage() {
@@ -74,7 +81,7 @@ function ChatScreen({ navigation, ...props }) {
     <View style={s.containerChatScreen}>
       <View style={s.containerHeader}>
         <HeaderUser
-          userInitials={owner.initials}
+          userInitials={getInitials(owner)}
           userFullName={owner.fullName}
         />
         <View style={s.containerProduct}>
@@ -87,7 +94,9 @@ function ChatScreen({ navigation, ...props }) {
           >
             <View style={s.containerAvatars}>
               <View style={s.productAvatarContainer}>
-                {!!product.photos && product.photos.length > 0 ? (
+                {!!product &&
+                !!product.photos &&
+                product.photos.length > 0 ? (
                   <View>
                     <Image
                       source={{ uri: productPhoto }}
@@ -100,14 +109,16 @@ function ChatScreen({ navigation, ...props }) {
                 )}
               </View>
             </View>
-            <View style={s.infoText}>
-              <Text numberOfLines={1} style={s.textTitle}>
-                {product.title}
-              </Text>
-              <Text numberOfLines={1} style={s.textDescription}>
-                {product.description}
-              </Text>
-            </View>
+            {!!product && (
+              <View style={s.infoText}>
+                <Text numberOfLines={1} style={s.textTitle}>
+                  {product.title}
+                </Text>
+                <Text numberOfLines={1} style={s.textDescription}>
+                  {product.description}
+                </Text>
+              </View>
+            )}
             <View style={s.containerIcon}>
               <Entypo
                 name="chevron-right"
@@ -126,10 +137,10 @@ function ChatScreen({ navigation, ...props }) {
         <View style={s.containerList}>
           <FlatList
             contentContainerStyle={s.list}
-            onRefresh={() => messages && messages.fetch.run()}
-            refreshing={messages ? messages.fetch.isLoading : false}
+            onRefresh={() => messages && fetchMessages(chatId)}
+            refreshing={messages ? isLoadingMessage : false}
             keyExtractor={(item) => `${item.id}`}
-            data={messages ? messages.asList : []}
+            data={messages ? messages.slice() : []}
             inverted
             renderItem={({ item }) => (
               <MessagesItem item={item} rootProps={props} />
@@ -175,6 +186,33 @@ ChatScreen.navigationOptions = () => ({
 
 ChatScreen.propTypes = {
   navigation: T.object,
+  fetchProductId: T.func,
+  fetchMessages: T.func,
+  fetchOwnerId: T.func,
+  isLoadingMessage: T.bool,
+  product: T.object,
+  owner: T.object,
+  messages: T.object,
 };
 
-export default observer(ChatScreen);
+const mapStateToProps = (state, props) => {
+  const productId = props.navigation.getParam('productId');
+  const ownerId = props.navigation.getParam('ownerId');
+  return {
+    messages: messageSelectors.getMessages(state),
+    product: productSelector.getProduct(state, productId),
+    owner: productSelector.getProductOwner(state, ownerId),
+    isLoadingProduct: state.products.product.isLoading,
+    isLoadingOwner: state.viewer.fetchViewer.isLoading,
+    isLoadingMessage: state.messages.fetchMessage.isLoading,
+  };
+};
+const mapDispatchToProps = {
+  fetchProductId: productsOperations.fetchProductId,
+  fetchOwnerId: viewerOperations.fetchViewerId,
+  fetchMessages: messageOperations.fetchMessage,
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ChatScreen);

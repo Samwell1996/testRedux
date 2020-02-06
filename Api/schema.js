@@ -5,9 +5,12 @@ export const Product = new schema.Entity('products', { owner: User });
 
 export const ProductList = [Product];
 
-export const Chat = new schema.Entity('chats');
+export const Message = new schema.Entity('messages');
+export const Chat = new schema.Entity('chats', { message: Message });
 
 export const ChatList = [Chat];
+
+export const MessageList = [Message];
 // export const Product = new schema.Entity('products', {
 //   owner: User,
 // });

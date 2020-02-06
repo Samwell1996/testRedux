@@ -6,7 +6,7 @@ export const latestProducts = createAsyncActions(
 export const savedProducts = createAsyncActions(
   'products/savedProducts',
 );
-export const getByProductId = createAsyncActions(
-  'products/getByProductId',
+export const fetchProduct = createAsyncActions(
+  'products/fetchProduct',
 );
 export const ownProducts = createAsyncActions('products/ownProducts');

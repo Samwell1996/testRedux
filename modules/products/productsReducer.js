@@ -8,7 +8,7 @@ const INITIAL_STATE = {
     isError: false,
     error: null,
   },
-  getByProductId: {
+  product: {
     isLoading: false,
     isError: false,
     error: null,
@@ -55,26 +55,26 @@ export default handleActions(
         isError: true,
       },
     }),
-    [actions.getByProductId.start]: (state) => ({
+    [actions.fetchProduct.start]: (state) => ({
       ...state,
-      getByProductId: {
-        ...state.getByProductId,
+      product: {
+        ...state.product,
         isLoading: true,
         error: null,
         isError: false,
       },
     }),
-    [actions.getByProductId.success]: (state) => ({
+    [actions.fetchProduct.success]: (state) => ({
       ...state,
-      getByProductId: {
-        ...state.getByProductId,
+      product: {
+        ...state.product,
         isLoading: false,
       },
     }),
-    [actions.getByProductId.error]: (state, action) => ({
+    [actions.fetchProduct.error]: (state, action) => ({
       ...state,
-      getByProductId: {
-        ...state.getByProductId,
+      product: {
+        ...state.product,
         isLoading: false,
         error: action.payload,
         isError: true,

@@ -46,14 +46,15 @@ export function fetchMoreLatest() {
 export function fetchProductId(productId) {
   return async function fetchProductIdThunk(dispatch) {
     try {
-      dispatch(actions.getByProductId.start());
+      dispatch(actions.fetchProduct.start());
+      console.log('1--------------------');
       const res = await Api.Products.getById(productId);
       const { entities } = normalize(res.data, schema.Product);
-      dispatch(actions.getByProductId.success({ entities }));
+      console.log('2---------------------');
+      dispatch(actions.fetchProduct.success({ entities }));
+      console.log('3---------------------');
     } catch (err) {
-      dispatch(
-        actions.getByProductId.error({ message: err.message }),
-      );
+      dispatch(actions.fetchProduct.error({ message: err.message }));
     }
   };
 }

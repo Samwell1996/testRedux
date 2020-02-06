@@ -11,7 +11,10 @@ import gStyles from '../../styles/styles';
 import colors from '../../styles/colors';
 import ListFooter from '../../components/ProductList/ListFooter/ListFooter';
 import SearchView from '../../components/Filters/SearchView/SearchView';
-import { productsOperations, productSelector } from '../../modules/products';
+import {
+  productsOperations,
+  productSelector,
+} from '../../modules/products';
 
 function BrowseScreen({
   items,

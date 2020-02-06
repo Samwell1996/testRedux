@@ -3,6 +3,7 @@ import * as actions from './messageActions';
 
 const INITIAL_STATE = {
   fetchMessage: {
+    items: [],
     isLoading: false,
     error: null,
     isError: false,
@@ -18,19 +19,29 @@ export default handleActions(
   {
     [actions.fetchMessage.start]: (state) => ({
       ...state,
-      isLoading: true,
-      error: null,
-      isError: false,
+      fetchMessage: {
+        ...state.fetchMessage,
+        isLoading: true,
+        error: null,
+        isError: false,
+      },
     }),
-    [actions.fetchMessage.success]: (state) => ({
-      ...state.fetchMessage,
-      isLoading: true,
+    [actions.fetchMessage.success]: (state, action) => ({
+      ...state,
+      fetchMessage: {
+        ...state.fetchMessage,
+        isLoading: false,
+        items: action.payload.result,
+      },
     }),
     [actions.fetchMessage.error]: (state, action) => ({
-      ...state.fetchMessage,
-      isLoading: false,
-      error: action.payload,
-      isError: true,
+      ...state,
+      fetchMessage: {
+        ...state.fetchMessage,
+        isLoading: false,
+        error: action.payload.result,
+        isError: true,
+      },
     }),
     [actions.createMessage.start]: (state) => ({
       ...state,

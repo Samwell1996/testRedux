@@ -4,6 +4,10 @@ export function createDate(createdAt) {
   return format(new Date(createdAt), 'd/LL/yyy');
 }
 
+export function createDateMessages(createdAt) {
+  return format(new Date(createdAt), 'HH.mm');
+}
+
 export function getInitials(owner) {
   let i = '';
   const fullName = owner.fullName.split(' ');

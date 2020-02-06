@@ -1,7 +1,9 @@
 import { createAsyncActions } from '@letapp/redux-actions';
 
-export const fetchMessage = createAsyncActions('chats/fetchMessage');
+export const fetchMessage = createAsyncActions(
+  'messages/fetchMessage',
+);
 
 export const createMessage = createAsyncActions(
-  'chats/createMessage',
+  'messages/createMessage',
 );

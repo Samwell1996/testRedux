@@ -78,7 +78,7 @@ function ProductViewScreen({
       </TouchableOpacity>
     );
   }
-  
+
   return (
     <View style={s.container}>
       <LinearGradient
@@ -238,7 +238,7 @@ const mapStateToProps = (state, props) => {
     product: productSelector.getProduct(state, productID),
     owner: productSelector.getProductOwner(state, ownerID),
     userId: state.viewer.user.id,
-    isLoading: state.products.getByProductId.isLoading,
+    isLoading: state.products.product.isLoading,
     isLoadingOwner: state.viewer.fetchViewer.isLoading,
   };
 };
