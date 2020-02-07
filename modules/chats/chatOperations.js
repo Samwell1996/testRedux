@@ -17,3 +17,16 @@ export function fetchChat() {
     }
   };
 }
+
+export function createChat(id, message) {
+  return async function fetchChatThunk(dispatch) {
+    try {
+      dispatch(actions.createChat.start());
+      const res = await Api.Chats.createChat(id, message);
+      const { entities } = normalize(res.data, schema.Chat);
+      dispatch(actions.createChat.success({ entities }));
+    } catch (err) {
+      dispatch(actions.createChat.error({ message: err.message }));
+    }
+  };
+}

@@ -28,6 +28,7 @@ import {
   messageOperations,
   messageSelectors,
 } from '../../modules/messages';
+import { chatOperations } from '../../modules/chats';
 import { getInitials } from '../../modules/utils/utils';
 
 function ChatScreen({
@@ -35,6 +36,8 @@ function ChatScreen({
   fetchProductId,
   fetchOwnerId,
   fetchMessages,
+  createMessage,
+  createChat,
   isLoadingMessage,
   navigation,
   owner,
@@ -56,18 +59,18 @@ function ChatScreen({
   useEffect(() => {
     fetchProductId(productId);
     fetchOwnerId(ownerId);
-    if (chatId && messages) {
+    if (chatId) {
       fetchMessages(chatId);
     }
   }, []);
 
   async function onSendMessage() {
     try {
-      if (chatId && messages) {
-        messages.sendMessage.run(message);
+      if (chatId) {
+        createMessage(chatId, message);
+        // messages.sendMessage.run(message);
       } else {
-        const createdChatId = await product.createChat.run(message);
-
+        const createdChatId = await createChat(product.id, message);
         navigation.setParams({ chatId: createdChatId });
       }
       setMessage('');
@@ -188,6 +191,8 @@ ChatScreen.propTypes = {
   fetchProductId: T.func,
   fetchMessages: T.func,
   fetchOwnerId: T.func,
+  createChat: T.func,
+  createMessage: T.func,
   isLoadingMessage: T.bool,
   product: T.object,
   owner: T.object,
@@ -210,6 +215,8 @@ const mapDispatchToProps = {
   fetchProductId: productsOperations.fetchProductId,
   fetchOwnerId: viewerOperations.fetchViewerId,
   fetchMessages: messageOperations.fetchMessage,
+  createMessage: messageOperations.createMessage,
+  createChat: chatOperations.createChat,
 };
 export default connect(
   mapStateToProps,

@@ -45,19 +45,28 @@ export default handleActions(
     }),
     [actions.createMessage.start]: (state) => ({
       ...state,
-      isLoading: true,
-      error: null,
-      isError: false,
+      createMessage: {
+        ...state.createMessage,
+        isLoading: true,
+        error: null,
+        isError: false,
+      },
     }),
     [actions.createMessage.success]: (state) => ({
-      ...state.createMessage,
-      isLoading: true,
+      ...state,
+      createMessage: {
+        ...state.createMessage,
+        isLoading: false,
+      },
     }),
     [actions.createMessage.error]: (state, action) => ({
-      ...state.createMessage,
-      isLoading: false,
-      error: action.payload,
-      isError: true,
+      ...state,
+      createMessage: {
+        ...state.createMessage,
+        isLoading: false,
+        error: action.payload,
+        isError: true,
+      },
     }),
   },
   INITIAL_STATE,

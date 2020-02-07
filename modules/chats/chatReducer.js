@@ -45,19 +45,29 @@ export default handleActions(
     }),
     [actions.createChat.start]: (state) => ({
       ...state,
-      isLoading: true,
-      error: null,
-      isError: false,
+      createChat: {
+        ...state.createChat,
+        isLoading: true,
+        error: null,
+        isError: false,
+      },
     }),
-    [actions.createChat.success]: (state) => ({
-      ...state.createChat,
-      isLoading: true,
+    [actions.createChat.success]: (state, action) => ({
+      ...state,
+      createChat: {
+        ...state.createChat,
+        isLoading: false,
+        items: action.payload,
+      },
     }),
     [actions.createChat.error]: (state, action) => ({
-      ...state.createChat,
-      isLoading: false,
-      error: action.payload,
-      isError: true,
+      ...state,
+      createChat: {
+        ...state.createChat,
+        isLoading: false,
+        error: action.payload,
+        isError: true,
+      },
     }),
   },
   INITIAL_STATE,

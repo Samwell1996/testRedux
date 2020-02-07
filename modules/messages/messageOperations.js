@@ -17,3 +17,16 @@ export function fetchMessage(id) {
     }
   };
 }
+
+export function createMessage(id, message) {
+  return async function fetchChatThunk(dispatch) {
+    try {
+      dispatch(actions.createMessage.start());
+      const res = await Api.Chats.sendMessages(id, message);
+      const { entities } = normalize(res.data, schema.Message);
+      dispatch(actions.createMessage.success({ entities }));
+    } catch (err) {
+      dispatch(actions.createMessage.error({ message: err.message }));
+    }
+  };
+}
