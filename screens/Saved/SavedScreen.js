@@ -10,12 +10,11 @@ import SearchView from '../../components/Filters/SearchView/SearchView';
 import { s } from './styles';
 
 function SavedScreen() {
-  const store = useStore();
 
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    store.savedProducts.fetchSaved.run();
+
   }, []);
 
   return (
@@ -23,7 +22,7 @@ function SavedScreen() {
       <Header>
         <Search search={search} setSearch={setSearch} />
       </Header>
-      {!!search.length && (
+      {/* {!!search.length && (
         <SearchView
           items={store.savedProducts.search(search)}
           setSearch={setSearch}
@@ -33,7 +32,7 @@ function SavedScreen() {
         onRefresh={() => store.savedProducts.fetchSaved.run()}
         refreshing={store.savedProducts.fetchSaved.isLoading}
         store={store.savedProducts}
-      />
+      /> */}
     </View>
   );
 }
