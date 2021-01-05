@@ -11,7 +11,7 @@
     "@expo/vector-icons": "^10.0.6",
     "@letapp/redux-actions": "^3.0.1",
     "@types/react-native": "^0.60.25",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "date-fns": "^2.8.1",
     "expo": "^35.0.0",
     "expo-image-picker": "~7.0.0",
